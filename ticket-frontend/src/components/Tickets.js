@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 
 export default function TicketList(props) {
 
@@ -6,8 +6,15 @@ export default function TicketList(props) {
 		<div>
 			<h2>Active Tickets</h2>
 
-			
+			{props.ticketList.map(oneTicket => {
+				console.log(oneTicket.id)
+				return(
+					<div key={oneTicket.id}>
+						<h4>{oneTicket.description}</h4>
+					</div>
+				)
+			})}
 
 		</div>
-	)
+	)	
 }

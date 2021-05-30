@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import Tickets from './components/Tickets'
 import './App.css';
+import Tickets from './components/Tickets';
 
-const baseURL = 'https://localhost:8000'
+const baseURL = 'http://localhost:8000'
 
 export default class App extends Component {
   constructor(props) {
@@ -16,16 +16,17 @@ export default class App extends Component {
 
 //fetch tickets
 getTickets = () => {
-  fetch(baseURL + '/api/v1/tickets', {
+  fetch(baseURL + '/api/v1/tickets/', {
     credentials: 'include'
-  })
-  .then(res => {
-    if(res.status == 200 || res.status == 201) {
+  }).then(res => {
+    if(res.status === 200 || res.status === 201) {
       return res.json()
+    } else {
+      return []
     }
   }).then(data => {
     this.setState({
-      ticketList: data
+      ticketList: data.data
     })
   })
 }
@@ -42,9 +43,9 @@ componentDidMount() {
 
   render() {
     return (
-      <div>
+      <>
         <Tickets ticketList={this.state.ticketList}/>
-      </div>
+      </>
     )
   }
 }
