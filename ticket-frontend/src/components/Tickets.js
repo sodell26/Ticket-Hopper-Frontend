@@ -4,13 +4,17 @@ export default function TicketList(props) {
 
 	return (
 		<div>
-			<h2>Active Tickets</h2>
+			<h1>Active Tickets</h1>
 
 			{props.ticketList.map(oneTicket => {
 				console.log(oneTicket.id)
 				return(
 					<div key={oneTicket.id}>
-						<h4>{oneTicket.description}</h4>
+						<h2>Ticket Number: {oneTicket.id}</h2>
+						<h3>Submitted By: {oneTicket.submitted_by.username}</h3>
+						<h4>Description: {oneTicket.description}</h4>
+						<h4>Notes: {oneTicket.notes}</h4>
+						<h6>Created: {oneTicket.created}</h6>
 					</div>
 				)
 			})}
