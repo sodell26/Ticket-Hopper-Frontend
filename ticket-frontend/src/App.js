@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import Tickets from './components/Tickets';
+import NewTicket from './components/NewTicket'
 
 const baseURL = 'http://localhost:8000'
 
@@ -32,6 +33,16 @@ getTickets = () => {
 }
 
 
+//add a new ticket
+addTicket = (newTicket) => {
+  const copyTickets = [...this.state.ticketList]
+  copyTickets.push(newTicket)
+  this.setState({
+    ticketList: copyTickets
+  })
+}
+
+
 
 
 
@@ -45,6 +56,7 @@ componentDidMount() {
     return (
       <>
         <Tickets ticketList={this.state.ticketList}/>
+        <NewTicket addTicket={this.addTicket} baseURL={baseURL}/>
       </>
     )
   }
