@@ -4,16 +4,21 @@ export default function UserSignUp(props) {
 
 	return (
 		<div>
-			<form>
-				<label>
-					<input/>
+			<h3> User Sign Up </h3>
+			<form onSubmit={props.register}>
+				<label htmlFor="username">Username: 
+					<input type="text" id="username" name="username"/>
 				</label>
-				<label>
-					<input/>
+
+				<label htmlFor="email">Email: 
+					<input type="text" id="email" name="email"/>
 				</label>
-				<label>
-					<input/>
+
+				<label htmlFor="password">Password: 
+					<input type="text" id="password" name="password"/>
 				</label>
+
+				<input type="submit" value="Create Account" />
 			</form>
 		</div>
 	)

@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import './App.css';
 import Tickets from './components/Tickets';
-import NewTicket from './components/NewTicket'
+import NewTicket from './components/NewTicket';
+import UserLogin from './components/UserLogin';
+import UserSignUp from './components/UserSignUp';
 
 const baseURL = 'http://localhost:8000'
 
@@ -10,7 +12,8 @@ export default class App extends Component {
     super(props)
 
     this.state = {
-      ticketList: []
+      ticketList: [],
+      loggedIn: false
     }
   }
 
@@ -42,9 +45,62 @@ addTicket = (newTicket) => {
   })
 }
 
+loginUser = async(e) => {
+  e.preventDefault()
+  const url = baseURL + '/api/v1/users/login'
 
+  let loginBody = {
+    username: e.target.username.value,
+    password: e.target.password.value
+  }
 
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(loginBody),
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include'
+    })
+    if(response.status === 200){
+      this.setState({
+        loggedIn: true
+      })
+      this.getTickets()
+    }
+  }
+  catch(err) {
+    console.log('login error:', err)
+  }
+}
 
+registerUser = async(e) => {
+  e.preventDefault()
+
+  const url = baseURL + '/api/v1/users/register'
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      body: JSON.stringify({
+        username: e.target.username.value,
+        email: e.target.email.value,
+        password: e.target.password.value
+      }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    if(response.status === 401) {
+      alert("User already exists")
+    } else if (response.status === 201) {
+      this.loginUser(e)
+    }
+  } catch(error) {
+    console.log('register error: ', error)
+  }
+}
 
 
 
@@ -55,8 +111,14 @@ componentDidMount() {
   render() {
     return (
       <>
-        <Tickets ticketList={this.state.ticketList}/>
-        <NewTicket addTicket={this.addTicket} baseURL={baseURL}/>
+        <UserLogin loginUser={this.loginUser} />
+        <UserSignUp register={this.registerUser} />
+        {this.state.loggedIn &&
+          <div>
+            <Tickets ticketList={this.state.ticketList}/>
+            <NewTicket addTicket={this.addTicket} baseURL={baseURL}/>
+          </div>
+        }
       </>
     )
   }
