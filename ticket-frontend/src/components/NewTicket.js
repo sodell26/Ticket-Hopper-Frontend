@@ -35,7 +35,7 @@ export default class NewTicket extends Component {
 		}).then(res => {
 			return res.json()
 		}).then(data => {
-			this.props.addTicket(data)
+			this.props.addTicket(data.data)
 			this.setState({
 				description: '',
 				notes: '',

@@ -13,7 +13,8 @@ export default class App extends Component {
 
     this.state = {
       ticketList: [],
-      loggedIn: false
+      loggedIn: false,
+      username: ''
     }
   }
 
@@ -45,6 +46,10 @@ addTicket = (newTicket) => {
   })
 }
 
+componentDidMount() {
+  this.getTickets()
+}
+
 loginUser = async(e) => {
   e.preventDefault()
   const url = baseURL + '/api/v1/users/login'
@@ -65,7 +70,8 @@ loginUser = async(e) => {
     })
     if(response.status === 200){
       this.setState({
-        loggedIn: true
+        loggedIn: true,
+        // username: e.target.username.value
       })
       this.getTickets()
     }
@@ -104,10 +110,6 @@ registerUser = async(e) => {
 
 
 
-componentDidMount() {
-  this.getTickets()
-}
-
   render() {
     return (
       <>
@@ -115,7 +117,7 @@ componentDidMount() {
         <UserSignUp register={this.registerUser} />
         {this.state.loggedIn &&
           <div>
-            <Tickets ticketList={this.state.ticketList}/>
+            <Tickets ticketList={this.state.ticketList} username={this.state.username}/>
             <NewTicket addTicket={this.addTicket} baseURL={baseURL}/>
           </div>
         }
