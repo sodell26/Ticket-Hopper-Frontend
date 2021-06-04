@@ -17,39 +17,40 @@ export default class TicketList extends Component {
 
 // do a choseTeam() here to get the teams the user is one, then reference that id for the id in getUsers()
 
-chooseTeam = (id) => {
-	fetch(this.props.baseURL + '/<id>/myteams', {
+chooseTeam = () => {
+	fetch(this.props.baseURL + '/api/v1/users/' + this.props.userId + '/myteams', {
 		credentials: 'include'
 	})
 	.then(res => {
-		if(res.status === 200) {
+		if(res.status === 200 || res.status === 201) {
 			return res.json()
 		} else {
 			return []
 		}
 	}).then(data => {
+		console.log(data)
 		this.setState({
 			teamList: data.data
 		})
 	})
 }
 
-	getUsers = (id) => {
-		fetch(this.props.baseURL + '/api/v1/teams/<id>/teammembers', {
-			credentials: 'include'
-		})
-		.then(res => {
-			if(res.status === 200 || res.status === 201) {
-				return res.json()
-			} else { 
-				return []
-			}
-		}).then(data=> {
-			this.setState({
-				userList: data.data
-			})
-		})
-	}
+	// getUsers = (id) => {
+	// 	fetch(this.props.baseURL + '/api/v1/teams/<id>/teammembers', {
+	// 		credentials: 'include'
+	// 	})
+	// 	.then(res => {
+	// 		if(res.status === 200 || res.status === 201) {
+	// 			return res.json()
+	// 		} else { 
+	// 			return []
+	// 		}
+	// 	}).then(data=> {
+	// 		this.setState({
+	// 			userList: data.data
+	// 		})
+	// 	})
+	// }
 
 	showUserDropDown = (entry) => {
 		this.setState({
@@ -63,7 +64,18 @@ chooseTeam = (id) => {
 		})
 	}
 
+	componentDidMount() {
+		// this.getUsers()
+		this.chooseTeam()
+	}
+
+	showTeamInfo = (e) => {
+		this.showTeamDropDown();
+		this.chooseTeam()
+	}
+
 	render() {
+		console.log(this.props.baseURL + '/api/v1/users/' + this.props.userId + '/myteams')
 		return (
 			<div>
 				<h1>Active Tickets</h1>
@@ -80,17 +92,20 @@ chooseTeam = (id) => {
 								<h3>Assigned to: {oneTicket.assigned_to.username}</h3>
 							}
 
-							<Button className="team-btn" onClick={this.showTeamDropDown} variant='success'>Choose Team</Button>
-
+							<Button className="team-btn" onClick={this.showTeamInfo} variant='success'>Choose Team</Button>
 							{this.state.teamListOpen &&
-								<DropdownButton onClick={this.chooseTeam(this.props.username.id)} >
+								<DropdownButton title="Teams">
 									{this.state.teamList.map(oneTeam => {
-										<Dropdown.Item>{oneTeam.name}</Dropdown.Item>
+										console.log(oneTeam)
+										return (
+											<div>
+												<Dropdown.Item>{oneTeam.name}</Dropdown.Item>
+											</div>
+										)
 									})}
 								</DropdownButton>
 							}
-
-							<Button className="edit-btn" onClick={this.showUserDropDown} variant='success'>Assign to new user</Button>
+							{/*<Button className="edit-btn" onClick={this.showUserDropDown} variant='success'>Assign to new user</Button>
 
 							{this.state.editOpen &&
 								<DropdownButton onClick={this.getUsers} >
@@ -98,7 +113,7 @@ chooseTeam = (id) => {
 										<Dropdown.Item>{oneUser.username}</Dropdown.Item>
 									})}
 								</DropdownButton>
-							}
+							}*/}
 
 							<h3>Submitted By: {oneTicket.submitted_by.username}</h3>
 							<h4>Description: {oneTicket.description}</h4>

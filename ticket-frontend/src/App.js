@@ -127,7 +127,7 @@ registerUser = async(e) => {
         <UserSignUp register={this.registerUser} />
         {this.state.loggedIn &&
           <div>
-            <Tickets ticketList={this.state.ticketList} username={this.state.username} baseURL={this.baseURL} userId={this.state.userId}/>
+            <Tickets ticketList={this.state.ticketList} username={this.state.username} baseURL={baseURL} userId={this.state.userId}/>
             <NewTicket addTicket={this.addTicket} baseURL={baseURL}/>
           </div>
         }
