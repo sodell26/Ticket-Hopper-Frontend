@@ -13,6 +13,8 @@ export default class TicketList extends Component {
 		}
 	}
 
+// do a choseTeam() here to get the teams the user is one, then reference that id for the id in getUsers()
+
 	getUsers = (id) => {
 		fetch(this.props.baseURL + '/api/v1/teams/<id>/teammembers', {
 			credentials: 'include'
@@ -54,9 +56,9 @@ export default class TicketList extends Component {
 							}
 
 							<Button className="edit-btn" onClick={this.showUserDropDown} variant='success'>Assign to new user</Button>
-							
+
 							{this.state.editOpen &&
-								<DropdownButton >
+								<DropdownButton onClick={this.getUsers} >
 									{this.state.userList.map(oneUser => {
 										<Dropdown.Item>{oneUser.username}</Dropdown.Item>
 									})}
