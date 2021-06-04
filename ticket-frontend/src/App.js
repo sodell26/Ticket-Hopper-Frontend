@@ -16,7 +16,8 @@ export default class App extends Component {
     this.state = {
       ticketList: [],
       loggedIn: false,
-      username: ''
+      username: '',
+      userId: null
     }
   }
 
@@ -69,15 +70,21 @@ loginUser = async(e) => {
         'Content-Type': 'application/json'
       },
       credentials: 'include'
-    })
-    if(response.status === 200){
+    }).then(response => {
+      if(response.status === 200){
+        return response.json()
+      } else {
+        return []
+      }
+    }).then(data=> {
       this.setState({
         loggedIn: true,
-        // username: e.target.username.value
+        username: e.target.username,
+        userId: data.data.id
       })
+    })
       this.getTickets()
     }
-  }
   catch(err) {
     console.log('login error:', err)
   }
@@ -113,13 +120,14 @@ registerUser = async(e) => {
 
 
   render() {
+    // console.log(this.state.userId)
     return (
       <>
         <UserLogin loginUser={this.loginUser} />
         <UserSignUp register={this.registerUser} />
         {this.state.loggedIn &&
           <div>
-            <Tickets ticketList={this.state.ticketList} username={this.state.username} baseURL={this.baseURL}/>
+            <Tickets ticketList={this.state.ticketList} username={this.state.username} baseURL={this.baseURL} userId={this.state.userId}/>
             <NewTicket addTicket={this.addTicket} baseURL={baseURL}/>
           </div>
         }
