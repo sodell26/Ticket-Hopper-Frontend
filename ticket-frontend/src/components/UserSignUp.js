@@ -1,5 +1,5 @@
 import React from 'react';
-import Button from 'react-bootstrap/Button'
+import Button from 'react-bootstrap/Button';
 
 
 export default function UserSignUp(props) {
@@ -20,7 +20,7 @@ export default function UserSignUp(props) {
 					<input type="text" id="password" name="password"/>
 				</label>
 
-				<input type="submit" value="Create Account" />
+				<Button className="signup-btn" variant="primary" type="submit">Create Account</Button>
 			</form>
 		</div>
 	)

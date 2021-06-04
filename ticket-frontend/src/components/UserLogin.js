@@ -17,7 +17,7 @@ export default function UserLogin(props){
 					<input type="text" id="password" name="password"/>
 				</label>
 
-				<input type="submit" value="Login"/>
+				<Button className="login-btn" type="submit" variant="success">Log In</Button>
 			</form>
 		</div>
 	)

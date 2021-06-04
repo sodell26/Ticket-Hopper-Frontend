@@ -4,6 +4,7 @@ import Tickets from './components/Tickets';
 import NewTicket from './components/NewTicket';
 import UserLogin from './components/UserLogin';
 import UserSignUp from './components/UserSignUp';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from 'react-bootstrap/Button'
 
 const baseURL = 'http://localhost:8000'
@@ -118,7 +119,7 @@ registerUser = async(e) => {
         <UserSignUp register={this.registerUser} />
         {this.state.loggedIn &&
           <div>
-            <Tickets ticketList={this.state.ticketList} username={this.state.username}/>
+            <Tickets ticketList={this.state.ticketList} username={this.state.username} baseURL={this.baseURL}/>
             <NewTicket addTicket={this.addTicket} baseURL={baseURL}/>
           </div>
         }
