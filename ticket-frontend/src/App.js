@@ -7,13 +7,13 @@ import UserSignUp from './components/UserSignUp';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from 'react-bootstrap/Button'
 
-let baseURL
+let baseURL = process.env.REACT_APP_BASEURL
 
-if (process.env.NODE_ENV==='development'){
-  baseURL = 'http://localhost:8000'
-} else {
-  baseURL = process.env.REACT_APP_BASEURL
-}
+// if (process.env.NODE_ENV==='development'){
+//   baseURL = 'http://localhost:8000'
+// } else {
+//   baseURL = process.env.REACT_APP_BASEURL
+// }
 
 export default class App extends Component {
   constructor(props) {
