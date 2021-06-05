@@ -1,70 +1,96 @@
-# Getting Started with Create React App
+# Ticket-Hopper
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A full CRUD app to for tracking tickets. 
 
-## Available Scripts
+# User Stories  
+### Team Member 
+User will be able to create an account.   
+User will be able to login if account exists and credentials match.  
+User will be able to see tickets   
+User will be able to open ticket to see details.   
+User will be able to add notes (edit), complete ticket  
+User will be able to create a ticket. 
 
-In the project directory, you can run:
 
-### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Stretch Goals
+Ticket and team can be assigned dynamically.    
+User will be able to reject a ticket, with a note (optional).     
+User will be able to request to join a team. 
+User will be able to view tickets assigned to them, all available tickets, completed tickets, and all tickets (closed and open).    
+Team member will be able to add notes that the customer cannot see as well as ones for the customer.      
+Customer will be notified automatically via email once the ticket is marked completed.       
+Frog specific design.        
+Search for tickets by team, assigned team member, customer, key words.       
+Admin account that can see all teams and all tickets.      
+Chat feature between members of the team.          
+Manager/Team Members will be able to switch between teams without signing out or making a new account.      
+Completed tickets automatically delete after so many days.                
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Manager Member 
+User will be able to do the same as Team Member.   
+User will be able to create a Team.      
+User can only create unique team names.            
+User with manager authority will be able to add, edit, delete to the list of members on a team.   
+User will be able to assign tickets to Team Members, including self.    
+User will be able to return tickets to customer to reject, review, or ask for more information.   
 
-### `npm run build`
+### Customer
+User will be able to submit tickets.      
+User will be able to see status of ticket (who it's assigned to, any notes, and when it's completed).      
+User will be able to add contact information to ticket.   
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Models
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### customer
+Username: CharField   
+Email: CharField   
+Password: CharField   
+tickets: []      
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Team Member/ Manager   
+Username: CharField,
+Email: CharField,
+Password: CharField,
+Teams:
+Tickets:
+Manager: boolean   
 
-### `npm run eject`
+### Team
+name: CharField   
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Tickets:   
+Id:   
+AssignedTo: (member/manager id as foreign key)   
+Description: CharField,   
+Submitted by: linked to any user,   
+notes: (this will be where they can add line of code, maybe not needed for model?)   
+open: boolean   
+created:   
+team:   
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### TeamMemberTeam
+team: ForeignKey to Team    
+team_member: ForeignKey to TeamMember   
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+##WireFrame
 
-## Learn More
+###Landing Page   
+![Landing Page](/images/Landing-Page.png)      
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+###Create Account Page   
+![Create Account](/images/Create-Account.png)  
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+###Ticket Page
+![Ticket Page](/images/All-Tickets.png)  
 
-### Code Splitting
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
 
-### Analyzing the Bundle Size
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
 
-### Making a Progressive Web App
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
 
-### Advanced Configuration
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
