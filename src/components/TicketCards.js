@@ -16,7 +16,7 @@ export default class TicketCards extends React.Component {
 					console.log(oneTicket.id)
 					return(
 						<div className="col-sm-6">
-							<div className="card">
+							<div className="card" style={{'marginBottom': '1rem'}}>
 								<div key={oneTicket.id}>
 									<h2 className="card-header bg-success text-white">Ticket Number: {oneTicket.id}</h2>
 									<div className="card-body bg-light">

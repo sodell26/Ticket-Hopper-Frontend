@@ -7,7 +7,9 @@ import UserSignUp from './components/UserSignUp';
 import EditTicket from './components/EditTicket';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal'
+import Modal from 'react-bootstrap/Modal';
+import Tab from 'react-bootstrap/Tab';
+import Tabs from 'react-bootstrap/Tabs';
 
 let baseURL
 
@@ -27,7 +29,11 @@ export default class App extends Component {
       username: '',
       userId: null,
       ticketToEdit: {},
-      editOpen: false
+      editOpen: false, 
+      loginShow: false,
+      signupShow: false,
+      landingShow:true,
+      newShow:false
     }
   }
 
@@ -126,7 +132,8 @@ showEditForm = (entry) => {
 
 onClose = e => {
   this.setState({
-    editOpen: false
+    editOpen: false,
+    newShow: false
   })
 }
 
@@ -156,6 +163,9 @@ loginUser = async(e) => {
     }).then(data=> {
       this.setState({
         loggedIn: true,
+        landingShow: false,
+        loginShow: false,
+        signupShow: false,
         username: e.target.username,
         userId: data.data.id
       })
@@ -188,10 +198,35 @@ registerUser = async(e) => {
       alert("User already exists")
     } else if (response.status === 201) {
       this.loginUser(e)
+      this.setState({
+        landingShow: false,
+        loginShow: false,
+        signupShow: false
+      })
     }
   } catch(error) {
     console.log('register error: ', error)
   }
+}
+
+showLogin = (entry) => {
+  this.setState({
+    loginShow: !this.state.loginShow,
+    signupShow: false
+  })
+}
+
+showSignUp = (entry) => {
+  this.setState({
+    loginShow: false,
+    signupShow:!this.state.signupShow
+  })
+}
+
+showNew = (entry) => {
+  this.setState({
+    newShow: true
+  })
 }
 
 
@@ -200,13 +235,33 @@ registerUser = async(e) => {
     // console.log(this.state.userId)
     return (
       <>
-        <UserLogin loginUser={this.loginUser} />
-        <UserSignUp register={this.registerUser} />
+        {this.state.landingShow &&
+          <div className="row" style={{"marginTop": "3rem"}}>
+          <div className="col-sm-4"></div>
+          <div className="card col-sm-4" style={{"paddingTop": ".8rem"}}>
+          <Tabs defaultActiveKey="login" id="uncontrolled-tab-example">
+            <Tab eventKey="login" title="Login">
+              <UserLogin loginUser={this.loginUser} />
+            </Tab>
+            <Tab eventKey="register" title="Register">
+              <UserSignUp register={this.registerUser} />
+            </Tab>
+          </Tabs>
+          </div>
+          </div>
+
+
+
+        }
+
         {this.state.loggedIn &&
           <div>
+          <Button onClick={this.showNew}>Add New Ticket</Button>
             <Tickets ticketList={this.state.ticketList} username={this.state.username} baseURL={baseURL} userId={this.state.userId} currentTeam={this.state.currentTeam} showEditForm={this.showEditForm} deleteTicket={this.deleteTicket} editOpen={this.state.editOpen} handleEdit={this.handleSubmit} handleEditChange={this.handleChange} description={this.state.description} notes={this.state.notes}/>
-            <NewTicket ticketList={this.state.ticketList} addTicket={this.addTicket} baseURL={baseURL} getTickets={this.getTickets}/>
 
+            {this.state.newShow &&
+             <NewTicket ticketList={this.state.ticketList} addTicket={this.addTicket} baseURL={baseURL} getTickets={this.getTickets} newShow={this.state.newShow} onClose={this.onClose} />
+            }
              
                   <div>
                     <Modal show={this.state.editOpen} onHide={this.onClose}>
@@ -245,6 +300,8 @@ registerUser = async(e) => {
                       </form>*/}
                       </Modal>
                     </div>
+
+
 
           </div>
         }

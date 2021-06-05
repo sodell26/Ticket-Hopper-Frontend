@@ -5,23 +5,27 @@ import Button from 'react-bootstrap/Button';
 export default function UserSignUp(props) {
 
 	return (
-		<div>
-			<h3> User Sign Up </h3>
-			<form onSubmit={props.register}>
-				<label htmlFor="username">Username: 
-					<input type="text" id="username" name="username"/>
-				</label>
 
-				<label htmlFor="email">Email: 
-					<input type="text" id="email" name="email"/>
-				</label>
-
-				<label htmlFor="password">Password: 
-					<input type="text" id="password" name="password"/>
-				</label>
-
-				<Button className="signup-btn" variant="primary" type="submit">Create Account</Button>
-			</form>
+		<div className="register-form">
+		    <form onSubmit={props.register}>
+		        <h2 className="text-center">Register</h2>       
+		        <div className="form-group">
+		            <input type="text" className="form-control" id="username" name="username" placeholder="Username" required="required" autocomplete="off"/>
+		        </div>
+		        <div className="form-group">
+		            <input type="email" className="form-control" id="email" name="email" placeholder="Email" required="required" autocomplete="off"/>
+		        </div>
+		        <div className="form-group">
+		            <input type="password" className="form-control" id="password" name="password" placeholder="Password" required="required" autocomplete="off"/>
+		        </div>
+		        <div className="form-group">
+		            <Button className="login-btn btn-block" type="submit" variant="success">Sign Up</Button>
+		        </div>       
+		    </form>
 		</div>
+
+
+
+
 	)
 }
