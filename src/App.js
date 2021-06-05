@@ -87,6 +87,22 @@ handleSubmit = async (e) => {
   }
 }
 
+deleteTicket = async (id) => {
+  const url = baseURL + '/api/v1/tickets/' + id
+
+  const response = await fetch(url, {method: 'DELETE'})
+
+  const index = this.state.ticketList.findIndex(ticket => ticket.id === id)
+
+  const copyTickets = [...this.state.ticketList]
+
+  copyTickets.splice(index,1)
+
+  this.setState({
+    ticketList: copyTickets
+  })
+}
+
 handleChange = (event) => {
   this.setState({
     [event.target.name]: event.target.value
@@ -180,7 +196,7 @@ registerUser = async(e) => {
         <UserSignUp register={this.registerUser} />
         {this.state.loggedIn &&
           <div>
-            <Tickets ticketList={this.state.ticketList} username={this.state.username} baseURL={baseURL} userId={this.state.userId} currentTeam={this.state.currentTeam} showEditForm={this.showEditForm}/>
+            <Tickets ticketList={this.state.ticketList} username={this.state.username} baseURL={baseURL} userId={this.state.userId} currentTeam={this.state.currentTeam} showEditForm={this.showEditForm} deleteTicket={this.deleteTicket}/>
             <NewTicket ticketList={this.state.ticketList} addTicket={this.addTicket} baseURL={baseURL} getTickets={this.getTickets}/>
           </div>
         }

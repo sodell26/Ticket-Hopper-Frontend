@@ -153,7 +153,7 @@ handleSelect=(e)=> {
 			<>
 			<div>
 				<h1>Active Tickets</h1>
-				<TicketCards ticketList={this.props.ticketList} showEditForm={this.props.showEditForm}/>
+				<TicketCards ticketList={this.props.ticketList} showEditForm={this.props.showEditForm} deleteTicket={this.props.deleteTicket}/>
 			{/*{this.state.ticketList.map((oneTicket,index)*/}
 {/*				{this.state.ticketList.map((oneTicket) => {
 					console.log(oneTicket.id)

@@ -23,6 +23,7 @@ export default class TicketCards extends React.Component {
 
 							<h6>Created: {oneTicket.created}</h6>
 							<Button variant='info' onClick={()=> this.props.showEditForm(oneTicket)}>Edit</Button>
+							<Button variant='danger' onClick={()=> this.props.deleteTicket(oneTicket.id)}>Delete</Button>
 						</div>
 					)
 				})}
