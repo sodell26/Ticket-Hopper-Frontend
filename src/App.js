@@ -4,6 +4,7 @@ import Tickets from './components/Tickets';
 import NewTicket from './components/NewTicket';
 import UserLogin from './components/UserLogin';
 import UserSignUp from './components/UserSignUp';
+import EditTicket from './components/EditTicket';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from 'react-bootstrap/Button'
 
@@ -196,26 +197,27 @@ registerUser = async(e) => {
         <UserSignUp register={this.registerUser} />
         {this.state.loggedIn &&
           <div>
-            <Tickets ticketList={this.state.ticketList} username={this.state.username} baseURL={baseURL} userId={this.state.userId} currentTeam={this.state.currentTeam} showEditForm={this.showEditForm} deleteTicket={this.deleteTicket}/>
+            <Tickets ticketList={this.state.ticketList} username={this.state.username} baseURL={baseURL} userId={this.state.userId} currentTeam={this.state.currentTeam} showEditForm={this.showEditForm} deleteTicket={this.deleteTicket} editOpen={this.state.editOpen} handleEdit={this.handleSubmit} handleEditChange={this.handleChange} description={this.state.description} notes={this.state.notes}/>
             <NewTicket ticketList={this.state.ticketList} addTicket={this.addTicket} baseURL={baseURL} getTickets={this.getTickets}/>
+
+              {this.state.editOpen &&
+                <div>
+                  <form onSubmit={this.handleSubmit}>
+                      <label> Description: 
+                        <input name="description" onChange={this.handleChange} value={this.state.description}/>
+                      </label>
+
+                      <label>Notes: 
+                        <input name="notes" onChange={this.handleChange} value={this.state.notes}/>
+                      </label>
+
+                      <Button type='submit' variant='warning'>Edit</Button>
+
+                  </form>
+                </div>
+
+                }
           </div>
-        }
-
-        {this.state.editOpen &&
-            <div>
-              <form onSubmit={this.handleSubmit}>
-                <label> Description: 
-                  <input name="description" onChange={this.handleChange} value={this.state.description}/>
-                </label>
-
-                <label>Notes: 
-                  <input name="notes" onChange={this.handleChange} value={this.state.notes}/>
-                </label>
-
-                <Button type='submit' variant='warning'>Edit</Button>
-
-              </form>
-            </div>
         }
       </>
     )
