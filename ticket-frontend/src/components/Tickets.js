@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from 'react-bootstrap/Button';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
+
 
 export default class TicketList extends Component {
 	constructor(props) {
@@ -10,12 +12,31 @@ export default class TicketList extends Component {
 		this.state={
 			editOpen: false,
 			teamListOpen: false,
+			ticketList: [],
 			userList: [],
-			teamList: []
+			teamList: [],
+			teamID: null,
+			teamName: '',
+			ticketToEdit: {},
+			index: null
 		}
 	}
 
-// do a choseTeam() here to get the teams the user is one, then reference that id for the id in getUsers()
+getTickets = () => {
+  fetch(this.props.baseURL + '/api/v1/tickets/', {
+    credentials: 'include'
+  }).then(res => {
+    if(res.status === 200 || res.status === 201) {
+      return res.json()
+    } else {
+      return []
+    }
+  }).then(data => {
+    this.setState({
+      ticketList: data.data
+    })
+  })
+}
 
 chooseTeam = () => {
 	fetch(this.props.baseURL + '/api/v1/users/' + this.props.userId + '/myteams', {
@@ -28,29 +49,30 @@ chooseTeam = () => {
 			return []
 		}
 	}).then(data => {
-		console.log(data)
+		// console.log(data)
 		this.setState({
-			teamList: data.data
+			teamList: data.data,
+			teamID: this.state.teamList.id
 		})
 	})
 }
 
-	// getUsers = (id) => {
-	// 	fetch(this.props.baseURL + '/api/v1/teams/<id>/teammembers', {
-	// 		credentials: 'include'
-	// 	})
-	// 	.then(res => {
-	// 		if(res.status === 200 || res.status === 201) {
-	// 			return res.json()
-	// 		} else { 
-	// 			return []
-	// 		}
-	// 	}).then(data=> {
-	// 		this.setState({
-	// 			userList: data.data
-	// 		})
-	// 	})
-	// }
+	getUsers = () => {
+		fetch(this.props.baseURL + '/api/v1/teams/' + this.props.teamId +'/teammembers', {
+			credentials: 'include'
+		})
+		.then(res => {
+			if(res.status === 200 || res.status === 201) {
+				return res.json()
+			} else { 
+				return []
+			}
+		}).then(data=> {
+			this.setState({
+				userList: data.data
+			})
+		})
+	}
 
 	showUserDropDown = (entry) => {
 		this.setState({
@@ -58,29 +80,83 @@ chooseTeam = () => {
 		})
 	}
 
-	showTeamDropDown = (entry) => {
+
+
+handleSubmit = async (e) => {
+	e.preventDefault()
+
+	const url = this.props.baseURL + '/api/v1/tickets/' + this.state.ticketToEdit.id
+
+	const response = await fetch(url, {
+			method: 'PUT',
+			body: JSON.stringify({
+				teamName: e.target.teamName.value
+			}),
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			credentials: 'include'
+		})
+		if (response.status === 200) {
+			const updateTicket = await response.json()
+
+			const findIndex = this.state.ticketList.findIndex(ticket => ticket.id === updateTicket.data.id)
+
+			const copyTickets = [...this.state.ticketList]
+			copyTickets[findIndex] = updateTicket.data
+
+			this.setState({
+				ticketList: copyTickets,
+				teamListOpen: false
+			})
+		}
+}
+
+
+handleChange = (event) => {
+	
+}
+
+handleSelect=(e)=> {
+	console.log(e)
+	this.setState({
+		teamName: e
+	})
+}
+
+	showTeamDropDown = (index) => {
+		console.log(this.state.ticketToEdit)
+
 		this.setState({
-			teamListOpen: true
+			teamListOpen: !this.state.teamListOpen,
+			index: index
 		})
 	}
 
 	componentDidMount() {
 		// this.getUsers()
 		this.chooseTeam()
+		this.getTickets()
 	}
 
-	showTeamInfo = (e) => {
-		this.showTeamDropDown();
+	showTeamInfo = (index) => {
+		this.showTeamDropDown(index);
 		this.chooseTeam()
 	}
 
+	// showUserInfo = (e) => {
+	// 	this.showUserDropDown();
+	// 	this.getUsers()
+	// }
+
+
 	render() {
-		console.log(this.props.baseURL + '/api/v1/users/' + this.props.userId + '/myteams')
 		return (
+			<>
 			<div>
 				<h1>Active Tickets</h1>
 
-				{this.props.ticketList.map(oneTicket => {
+				{this.state.ticketList.map((oneTicket,index) => {
 					console.log(oneTicket.id)
 					return(
 						<div key={oneTicket.id}>
@@ -92,28 +168,21 @@ chooseTeam = () => {
 								<h3>Assigned to: {oneTicket.assigned_to.username}</h3>
 							}
 
-							<Button className="team-btn" onClick={this.showTeamInfo} variant='success'>Choose Team</Button>
-							{this.state.teamListOpen &&
-								<DropdownButton title="Teams">
-									{this.state.teamList.map(oneTeam => {
-										console.log(oneTeam)
+							{/*<Button className="member-btn" onClick={this.showUserInfo} variant='success'>Choose Member</Button>
+
+							{this.state.editOpen &&
+								<DropdownButton title="Members">
+									{this.state.userList.map(oneUser => {
+										console.log(oneUser)
 										return (
 											<div>
-												<Dropdown.Item>{oneTeam.name}</Dropdown.Item>
+												<Dropdown.Item>{oneUser.username}</Dropdown.Item>
 											</div>
 										)
 									})}
 								</DropdownButton>
-							}
-							{/*<Button className="edit-btn" onClick={this.showUserDropDown} variant='success'>Assign to new user</Button>
-
-							{this.state.editOpen &&
-								<DropdownButton onClick={this.getUsers} >
-									{this.state.userList.map(oneUser => {
-										<Dropdown.Item>{oneUser.username}</Dropdown.Item>
-									})}
-								</DropdownButton>
 							}*/}
+							
 
 							<h3>Submitted By: {oneTicket.submitted_by.username}</h3>
 							<h4>Description: {oneTicket.description}</h4>
@@ -128,11 +197,31 @@ chooseTeam = () => {
 
 
 							<h6>Created: {oneTicket.created}</h6>
+
+						<div>
+							<Button className="team-btn" onClick={() => this.showTeamInfo(index)} variant='success'>Choose Team</Button>
+										{(this.state.teamListOpen && index ===this.state.index) &&
+											
+												<DropdownButton title={this.state.teamName} id="teamName" name="teamName">
+													{this.state.teamList.map(oneTeam => {
+													 
+														return (
+															
+																<Dropdown.Item eventKey={oneTeam.name} name="teamName" onSelect={this.handleSelect}>{oneTeam.name}</Dropdown.Item>
+														)
+													})}
+												</DropdownButton>
+
+										}
+						</div>
 						</div>
 					)
+
+
 				})}
 
 			</div>
+			</>
 		)
 	}	
 }

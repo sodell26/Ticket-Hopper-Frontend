@@ -17,7 +17,7 @@ export default class App extends Component {
       ticketList: [],
       loggedIn: false,
       username: '',
-      userId: null
+      userId: null,
     }
   }
 
@@ -127,8 +127,8 @@ registerUser = async(e) => {
         <UserSignUp register={this.registerUser} />
         {this.state.loggedIn &&
           <div>
-            <Tickets ticketList={this.state.ticketList} username={this.state.username} baseURL={baseURL} userId={this.state.userId}/>
-            <NewTicket addTicket={this.addTicket} baseURL={baseURL}/>
+            <Tickets ticketList={this.state.ticketList} username={this.state.username} baseURL={baseURL} userId={this.state.userId} currentTeam={this.state.currentTeam}/>
+            <NewTicket addTicket={this.addTicket} baseURL={baseURL} getTickets={this.getTickets}/>
           </div>
         }
       </>
