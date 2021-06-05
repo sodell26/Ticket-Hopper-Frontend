@@ -7,13 +7,13 @@ import UserSignUp from './components/UserSignUp';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from 'react-bootstrap/Button'
 
-let baseURL = process.env.REACT_APP_BASEURL
+let baseURL
 
-// if (process.env.NODE_ENV==='development'){
-//   baseURL = 'http://localhost:8000'
-// } else {
-//   baseURL = process.env.REACT_APP_BASEURL
-// }
+if (process.env.NODE_ENV==='development'){
+  baseURL = 'http://localhost:8000'
+} else {
+  baseURL = process.env.REACT_APP_BASEURL
+}
 
 export default class App extends Component {
   constructor(props) {
@@ -52,6 +52,7 @@ addTicket = (newTicket) => {
   this.setState({
     ticketList: copyTickets
   })
+  this.getTickets()
 }
 
 componentDidMount() {
@@ -133,7 +134,7 @@ registerUser = async(e) => {
         {this.state.loggedIn &&
           <div>
             <Tickets ticketList={this.state.ticketList} username={this.state.username} baseURL={baseURL} userId={this.state.userId} currentTeam={this.state.currentTeam}/>
-            <NewTicket addTicket={this.addTicket} baseURL={baseURL} getTickets={this.getTickets}/>
+            <NewTicket ticketList={this.state.ticketList} addTicket={this.addTicket} baseURL={baseURL} getTickets={this.getTickets}/>
           </div>
         }
       </>
