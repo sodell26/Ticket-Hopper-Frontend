@@ -27,7 +27,6 @@ export default class App extends Component {
     }
   }
 
-
 //fetch tickets
 getTickets = () => {
   fetch(baseURL + '/api/v1/tickets/', {
