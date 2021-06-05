@@ -11,28 +11,33 @@ export default class TicketCards extends React.Component {
 	render() {
 		return (
 			<>
+			<div className="row">
 			{this.props.ticketList.map(oneTicket => {
 					console.log(oneTicket.id)
 					return(
-						<div>
-							<div key={oneTicket.id}>
-								<h2>Ticket Number: {oneTicket.id}</h2>
+						<div className="col-sm-6">
+							<div className="card">
+								<div key={oneTicket.id}>
+									<h2 className="card-header bg-success text-white">Ticket Number: {oneTicket.id}</h2>
+									<div className="card-body bg-light">
+										<h3> Assigned to: Unassigned</h3>
+										<h3>Submitted By: {oneTicket.submitted_by.username}</h3>
+										<h4>Description: {oneTicket.description}</h4>
+										<h4> Team: Unassigned </h4>
 
-								<h3> Assigned to: Unassigned</h3>
-								<h3>Submitted By: {oneTicket.submitted_by.username}</h3>
-								<h4>Description: {oneTicket.description}</h4>
-								<h4> Team: Unassigned </h4>
-
-								<h6>Created: {oneTicket.created}</h6>
-								<Button variant='info' onClick={()=> this.props.showEditForm(oneTicket)}>Edit</Button>
-								<Button variant='danger' onClick={()=> this.props.deleteTicket(oneTicket.id)}>Delete</Button>
-								
+										<h6>Created: {oneTicket.created}</h6>
+									</div>
+									<div className="card-footer bg-secondary">
+										<Button variant='info' style={{'margin-right':".25rem"}} onClick={()=> this.props.showEditForm(oneTicket)}>Edit</Button>
+										<Button variant='danger' onClick={()=> this.props.deleteTicket(oneTicket.id)}>Delete</Button>
+									</div>
+									
+								</div>
 							</div>
 						</div>
-
 					)
 				})}
-			
+				</div>
 			</>
 		)
 	}

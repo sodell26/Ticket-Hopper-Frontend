@@ -6,7 +6,8 @@ import UserLogin from './components/UserLogin';
 import UserSignUp from './components/UserSignUp';
 import EditTicket from './components/EditTicket';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Button from 'react-bootstrap/Button'
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal'
 
 let baseURL
 
@@ -116,10 +117,16 @@ componentDidMount() {
 
 showEditForm = (entry) => {
   this.setState({
-    editOpen: true,
+    editOpen: !this.state.editOpen,
     description: entry.description,
     notes: entry.notes,
     ticketToEdit: entry
+  })
+}
+
+onClose = e => {
+  this.setState({
+    editOpen: false
   })
 }
 
@@ -200,23 +207,45 @@ registerUser = async(e) => {
             <Tickets ticketList={this.state.ticketList} username={this.state.username} baseURL={baseURL} userId={this.state.userId} currentTeam={this.state.currentTeam} showEditForm={this.showEditForm} deleteTicket={this.deleteTicket} editOpen={this.state.editOpen} handleEdit={this.handleSubmit} handleEditChange={this.handleChange} description={this.state.description} notes={this.state.notes}/>
             <NewTicket ticketList={this.state.ticketList} addTicket={this.addTicket} baseURL={baseURL} getTickets={this.getTickets}/>
 
-              {this.state.editOpen &&
-                <div>
-                  <form onSubmit={this.handleSubmit}>
-                      <label> Description: 
-                        <input name="description" onChange={this.handleChange} value={this.state.description}/>
-                      </label>
+             
+                  <div>
+                    <Modal show={this.state.editOpen} onHide={this.onClose}>
+                    <Modal.Header closeButton>
+                      <Modal.Title>Edit Ticket</Modal.Title>
+                    </Modal.Header>
+                    <form onSubmit={this.handleSubmit}>
+                      <Modal.Body>
+                        
+                        <label> Description: 
+                              <input name="description" onChange={this.handleChange} value={this.state.description}/>
+                            </label>
 
-                      <label>Notes: 
-                        <input name="notes" onChange={this.handleChange} value={this.state.notes}/>
-                      </label>
+                        <label>Notes: 
+                              <input name="notes" onChange={this.handleChange} value={this.state.notes}/>
+                            </label>
+                        
+                      </Modal.Body>
+                      <Modal.Footer>
+                        <Button type='submit' onClick={this.onClose} variant='warning'>Edit</Button>
+                      </Modal.Footer>
+                    </form>
+{/*                      <h4 className="modal-title">Edit Ticket</h4>
 
-                      <Button type='submit' variant='warning'>Edit</Button>
+                      <form onSubmit={this.handleSubmit}>
+                          <label> Description: 
+                            <input name="description" onChange={this.handleChange} value={this.state.description}/>
+                          </label>
 
-                  </form>
-                </div>
+                          <label>Notes: 
+                            <input name="notes" onChange={this.handleChange} value={this.state.notes}/>
+                          </label>
 
-                }
+                          <Button type='submit' variant='warning'>Edit</Button>
+
+                      </form>*/}
+                      </Modal>
+                    </div>
+
           </div>
         }
       </>
