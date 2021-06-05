@@ -24,6 +24,8 @@ export default class App extends Component {
       loggedIn: false,
       username: '',
       userId: null,
+      ticketToEdit: {},
+      editOpen: false
     }
   }
 
@@ -55,8 +57,53 @@ addTicket = (newTicket) => {
   this.getTickets()
 }
 
+handleSubmit = async (e) => {
+  e.preventDefault()
+
+  const url = baseURL + '/api/v1/tickets/' +this.state.ticketToEdit.id
+
+  const response = await fetch (url, {
+    method: 'PUT',
+    body: JSON.stringify({
+      description: e.target.description.value,
+      notes: e.target.notes.value
+    }),
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    credentials: 'include'
+  })
+  if(response.status === 200) {
+    const updatedTicket = await response.json()
+
+    const findIndex = this.state.ticketList.findIndex(ticket => ticket.id === updatedTicket.data.id)
+
+    const copyTickets = [...this.state.ticketList]
+    copyTickets[findIndex] = updatedTicket.data
+
+    this.setState({
+      ticketList:copyTickets
+    })
+  }
+}
+
+handleChange = (event) => {
+  this.setState({
+    [event.target.name]: event.target.value
+  })
+}
+
 componentDidMount() {
   this.getTickets()
+}
+
+showEditForm = (entry) => {
+  this.setState({
+    editOpen: true,
+    description: entry.description,
+    notes: entry.notes,
+    ticketToEdit: entry
+  })
 }
 
 loginUser = async(e) => {
@@ -133,9 +180,26 @@ registerUser = async(e) => {
         <UserSignUp register={this.registerUser} />
         {this.state.loggedIn &&
           <div>
-            <Tickets ticketList={this.state.ticketList} username={this.state.username} baseURL={baseURL} userId={this.state.userId} currentTeam={this.state.currentTeam}/>
+            <Tickets ticketList={this.state.ticketList} username={this.state.username} baseURL={baseURL} userId={this.state.userId} currentTeam={this.state.currentTeam} showEditForm={this.showEditForm}/>
             <NewTicket ticketList={this.state.ticketList} addTicket={this.addTicket} baseURL={baseURL} getTickets={this.getTickets}/>
           </div>
+        }
+
+        {this.state.editOpen &&
+            <div>
+              <form onSubmit={this.handleSubmit}>
+                <label> Description: 
+                  <input name="description" onChange={this.handleChange} value={this.state.description}/>
+                </label>
+
+                <label>Notes: 
+                  <input name="notes" onChange={this.handleChange} value={this.state.notes}/>
+                </label>
+
+                <Button type='submit' variant='warning'>Edit</Button>
+
+              </form>
+            </div>
         }
       </>
     )

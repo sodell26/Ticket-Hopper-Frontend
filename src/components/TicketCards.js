@@ -1,4 +1,6 @@
 import React from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Button from 'react-bootstrap/Button';
 
 export default class TicketCards extends React.Component {
 	constructor(props) {
@@ -20,6 +22,7 @@ export default class TicketCards extends React.Component {
 							<h4> Team: Unassigned </h4>
 
 							<h6>Created: {oneTicket.created}</h6>
+							<Button variant='info' onClick={()=> this.props.showEditForm(oneTicket)}>Edit</Button>
 						</div>
 					)
 				})}
