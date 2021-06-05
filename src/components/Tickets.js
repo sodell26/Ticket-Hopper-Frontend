@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import TicketCards from './TicketCards';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from 'react-bootstrap/Button';
 import Dropdown from 'react-bootstrap/Dropdown';
@@ -22,21 +23,21 @@ export default class TicketList extends Component {
 		}
 	}
 
-getTickets = () => {
-  fetch(this.props.baseURL + '/api/v1/tickets/', {
-    credentials: 'include'
-  }).then(res => {
-    if(res.status === 200 || res.status === 201) {
-      return res.json()
-    } else {
-      return []
-    }
-  }).then(data => {
-    this.setState({
-      ticketList: data.data
-    })
-  })
-}
+// getTickets = () => {
+//   fetch(this.props.baseURL + '/api/v1/tickets/', {
+//     credentials: 'include'
+//   }).then(res => {
+//     if(res.status === 200 || res.status === 201) {
+//       return res.json()
+//     } else {
+//       return []
+//     }
+//   }).then(data => {
+//     this.setState({
+//       ticketList: data.data
+//     })
+//   })
+// }
 
 chooseTeam = () => {
 	fetch(this.props.baseURL + '/api/v1/users/' + this.props.userId + '/myteams', {
@@ -113,9 +114,6 @@ handleSubmit = async (e) => {
 }
 
 
-handleChange = (event) => {
-	
-}
 
 handleSelect=(e)=> {
 	console.log(e)
@@ -136,7 +134,7 @@ handleSelect=(e)=> {
 	componentDidMount() {
 		// this.getUsers()
 		this.chooseTeam()
-		this.getTickets()
+		// this.getTickets()
 	}
 
 	showTeamInfo = (index) => {
@@ -155,18 +153,21 @@ handleSelect=(e)=> {
 			<>
 			<div>
 				<h1>Active Tickets</h1>
-
-				{this.state.ticketList.map((oneTicket,index) => {
+				<TicketCards ticketList={this.props.ticketList}/>
+			{/*{this.state.ticketList.map((oneTicket,index)*/}
+{/*				{this.state.ticketList.map((oneTicket) => {
 					console.log(oneTicket.id)
 					return(
 						<div key={oneTicket.id}>
 							<h2>Ticket Number: {oneTicket.id}</h2>
-							{oneTicket.assigned_to == null &&
+							{/*{oneTicket.assigned_to == null &&
 								<h3> Assigned to: Unassigned</h3>
 							}
 							{oneTicket.assigned_to != null &&
 								<h3>Assigned to: {oneTicket.assigned_to.username}</h3>
-							}
+							}*/}
+
+							{/*<h3> Assigned to: Unassigned</h3>*/}
 
 							{/*<Button className="member-btn" onClick={this.showUserInfo} variant='success'>Choose Member</Button>
 
@@ -184,21 +185,21 @@ handleSelect=(e)=> {
 							}*/}
 							
 
-							<h3>Submitted By: {oneTicket.submitted_by.username}</h3>
+							{/*<h3>Submitted By: {oneTicket.submitted_by.username}</h3>
 							<h4>Description: {oneTicket.description}</h4>
-							<h4>Notes: {oneTicket.notes}</h4>
-							{oneTicket.team === null &&
+							<h4>Notes: {oneTicket.notes}</h4>*/}
+							{/*{oneTicket.team === null &&
 								<h4> Team: Unassigned </h4>
 							}
 							{oneTicket.team != null &&
 								<h4> Team: {oneTicket.team.name}</h4>
-							}
+							}*/}
+{/*
+							<h4> Team: Unassigned </h4>
 
+							<h6>Created: {oneTicket.created}</h6>*/}
 
-
-							<h6>Created: {oneTicket.created}</h6>
-
-						<div>
+						{/*<div>
 							<Button className="team-btn" onClick={() => this.showTeamInfo(index)} variant='success'>Choose Team</Button>
 										{(this.state.teamListOpen && index ===this.state.index) &&
 											
@@ -213,12 +214,12 @@ handleSelect=(e)=> {
 												</DropdownButton>
 
 										}
-						</div>
-						</div>
-					)
+						</div>*/}
+						{/*</div>*/}
+					{/*)*/}
 
 
-				})}
+				{/*})}*/}
 
 			</div>
 			</>

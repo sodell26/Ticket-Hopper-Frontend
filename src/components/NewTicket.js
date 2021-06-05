@@ -50,7 +50,7 @@ export default class NewTicket extends Component {
 	render() {
 		return(
 			<>
-				<form onSubmit={this.handleSubmit}>
+				<form onSubmit={(event) => this.handleSubmit(event)}>
 					<label htmlFor='description'> Description: 
 						<input type='text' id='description' name='description' onChange={this.handleChange} value={this.state.description}/>
 					</label>
