@@ -79,13 +79,16 @@ team_member: ForeignKey to TeamMember
 
 ##WireFrame   
 
-###Landing Page      
+###Landing Page
+
 ![Landing Page](/images/Landing-Page.png)      
 
-###Create Account Page      
+###Create Account Page
+
 ![Create Account](/images/Create-Account.png)  
 
-###Ticket Page   
+###Ticket Page
+   
 ![Ticket Page](/images/All-Tickets.png)  
 
 
