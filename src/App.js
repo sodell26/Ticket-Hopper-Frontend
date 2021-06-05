@@ -209,6 +209,27 @@ registerUser = async(e) => {
   }
 }
 
+logOut = async (e) => {
+  e.preventDefault()
+
+  fetch(baseURL + '/api/v1/users/logout', {
+    credentials: 'include'
+  }).then(res => {
+    if(res.status === 200) {
+      return res.json()
+    } else {
+      return []
+    }
+  }).then(data => {
+    this.setState({
+      loggedIn:false,
+      landingShow: true
+    })
+  })
+
+
+}
+
 showLogin = (entry) => {
   this.setState({
     loginShow: !this.state.loginShow,
@@ -257,7 +278,10 @@ showNew = (entry) => {
         {this.state.loggedIn &&
           <div>
           <Button onClick={this.showNew}>Add New Ticket</Button>
+          <Button onClick={this.logOut} variant="dark" style={{'marginLeft':'.5rem'}}>Log Out</Button>
             <Tickets ticketList={this.state.ticketList} username={this.state.username} baseURL={baseURL} userId={this.state.userId} currentTeam={this.state.currentTeam} showEditForm={this.showEditForm} deleteTicket={this.deleteTicket} editOpen={this.state.editOpen} handleEdit={this.handleSubmit} handleEditChange={this.handleChange} description={this.state.description} notes={this.state.notes}/>
+
+
 
             {this.state.newShow &&
              <NewTicket ticketList={this.state.ticketList} addTicket={this.addTicket} baseURL={baseURL} getTickets={this.getTickets} newShow={this.state.newShow} onClose={this.onClose} />
